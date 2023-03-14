@@ -1,0 +1,2 @@
+FLASK_APP=opinions_app
+FLASK_ENV=development
