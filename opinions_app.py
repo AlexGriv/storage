@@ -1,7 +1,7 @@
 from datetime import datetime
 from random import randrange
 
-from flask import Flask, redirect, render_template, url_for, flash
+from flask import Flask, redirect, render_template, url_for, flash, abort, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, URLField
@@ -11,7 +11,7 @@ app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'MY SECRET KEY'
+app.config['SECRET_KEY'] = 'MYSECRETKEY'
 
 db = SQLAlchemy(app)
 
@@ -45,7 +45,7 @@ class OpinionForm(FlaskForm):
 def index_view():
     quantity = Opinion.query.count()
     if not quantity:
-        return 'В базе данных записей нет.'
+        abort(404)
     offset_value = randrange(quantity)
     opinion = Opinion.query.offset(offset_value).first()
     return render_template('opinion.html', opinion=opinion)
@@ -56,15 +56,12 @@ def add_opinion_view():
     form = OpinionForm()
     if form.validate_on_submit():
         text = form.text.data
-        # Если в БД уже есть мнение с текстом, который ввёл пользователь,
         if Opinion.query.filter_by(text=text).first() is not None:
-            # вызвать функцию flash и передать соответствующее сообщение
             flash('Такое мнение уже было оставлено ранее!')
-            # и вернуть пользователя на страницу «Добавить новое мнение»
             return render_template('add_opinion.html', form=form)
         opinion = Opinion(
-            title=form.title.data, 
-            text=form.text.data, 
+            title=form.title.data,
+            text=form.text.data,
             source=form.source.data
         )
         db.session.add(opinion)
@@ -77,6 +74,21 @@ def add_opinion_view():
 def opinion_view(id):
     opinion = Opinion.query.get_or_404(id)
     return render_template('opinion.html', opinion=opinion)
+
+
+# Тут декорируется обработчик и указывается код нужной ошибки
+@app.errorhandler(404)
+def page_not_found(error):
+    # В качестве ответа возвращается собственный шаблон
+    # и код ошибки
+    return render_template('404.html'), 404
+
+
+@app.errorhandler(500)
+def internal_error(error):
+    # В таких случаях можно откатить незафиксированные изменения в БД
+    db.session.rollback()
+    return render_template('500.html'), 500
 
 if __name__ == '__main__':
     app.run()
