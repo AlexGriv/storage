@@ -52,14 +52,14 @@ textarea {
     resize: none;
 }
 
-.button {
+.buttondetail {
     background-color: #3BBEBE;
     border-radius: 20px;
     color: #FFF;
     font-size: 20px;
 }
 
-.button:hover {
+.buttondetail:hover {
     background-color: #00D6D6;
     color: #FFF;
 }
@@ -74,20 +74,4 @@ textarea {
     .navbar-brand {
         margin: 0 auto;
     }
-}
-
-.pagination-page-info {
-    padding: .6em;
-    padding-left: 0;
-    width: 40em;
-    margin: .5em;
-    margin-left: 0;
-    font-size: 12px;
-}
-.pagination-page-info b {
-    color: black;
-    background: #6aa6ed;
-    padding-left: 2px;
-    padding: .1em .25em;
-    font-size: 150%;
 }

@@ -18,3 +18,7 @@ class OpinionForm(FlaskForm):
         validators=[Length(1, 256), Optional()]
     )
     submit = SubmitField('Добавить')
+
+
+class OpinionFormUpdate(OpinionForm):
+    submit = SubmitField('Редактировать')

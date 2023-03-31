@@ -1,28 +1,27 @@
 from random import randrange
-from flask_paginate import Pagination, get_page_parameter
 from flask import abort, flash, redirect, render_template, url_for
 
 from . import app, db
-from .forms import OpinionForm
+from .forms import OpinionForm, OpinionFormUpdate
 from .models import Opinion
 
 
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
-    opinions = Opinion.query.all()
-    if not opinions:
+    opinion = Opinion.query.order_by(Opinion.timestamp.desc()).all()
+    if not opinion:
         abort(404)
-    return render_template('opinions.html', opinion=opinions)
+    return render_template('opinions.html', opinion=opinion)
 
 
-"""@app.route('/')
-def index_view():
+@app.route('/random')
+def random():
     quantity = Opinion.query.count()
     if not quantity:
         abort(404)
     offset_value = randrange(quantity)
     opinion = Opinion.query.offset(offset_value).first()
-    return render_template('opinion.html', opinion=opinion)"""
+    return render_template('opinion.html', opinion=opinion)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -48,3 +47,32 @@ def add_opinion_view():
 def opinion_view(id):
     opinion = Opinion.query.get_or_404(id)
     return render_template('opinion.html', opinion=opinion)
+
+
+@app.route('/opinions/<int:id>/delete')
+def opinion_delete(id):
+    opinion = Opinion.query.get_or_404(id)
+    try:
+        db.session.delete(opinion)
+        db.session.commit()
+        return redirect('/')
+    except:
+        return "При удалении произошла ошибка"
+
+
+@app.route('/opinions/<int:id>/update', methods=['GET', 'POST'])
+def opinion_update(id):
+    opinion = Opinion.query.get(id)
+    form = OpinionFormUpdate()
+    if form.validate_on_submit():
+        opinion.title = form.title.data
+        opinion.text = form.text.data
+        opinion.source =form.source.data
+        try:
+            db.session.commit()
+            return redirect('/')
+        except:
+            return "При редактировании произошла ошибка"
+
+    else:
+        return render_template('opinion_update.html', opinion=opinion, form=form)
