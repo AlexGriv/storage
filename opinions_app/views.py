@@ -1,5 +1,5 @@
 from random import randrange
-
+from flask_paginate import Pagination, get_page_parameter
 from flask import abort, flash, redirect, render_template, url_for
 
 from . import app, db
@@ -7,14 +7,22 @@ from .forms import OpinionForm
 from .models import Opinion
 
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
+def index_view():
+    opinions = Opinion.query.all()
+    if not opinions:
+        abort(404)
+    return render_template('opinions.html', opinion=opinions)
+
+
+"""@app.route('/')
 def index_view():
     quantity = Opinion.query.count()
     if not quantity:
         abort(404)
     offset_value = randrange(quantity)
     opinion = Opinion.query.offset(offset_value).first()
-    return render_template('opinion.html', opinion=opinion)
+    return render_template('opinion.html', opinion=opinion)"""
 
 
 @app.route('/add', methods=['GET', 'POST'])
