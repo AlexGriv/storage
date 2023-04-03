@@ -14,6 +14,26 @@ def index_view():
     return render_template('opinions.html', opinion=opinion)
 
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
+
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+@app.route('/signup')
+def signup():
+    return render_template('signup.html')
+
+
+@app.route('/logout')
+def logout():
+    return 'Logout'
+
+
 @app.route('/random')
 def random():
     quantity = Opinion.query.count()

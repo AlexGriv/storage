@@ -6,7 +6,27 @@
       </a>
         <div class="d-flex justify-content-left">
           <ul class="nav nav-pills">
-            <li class="nav-item pe-5">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('profile') }}">
+                Profile
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('login') }}">
+                Login
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('signup') }}">
+                Sign Up
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('logout') }}">
+                Logout
+              </a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="{{ url_for('add_opinion_view') }}">
                 Добавить мнение о фильме
               </a>

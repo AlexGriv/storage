@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Login{%endblock %}
+{% block content %}
+<main>
+  <section class="container my-5">
+    <div class="row">
+        <div class="col-12 col-lg-7 my-5">
+        <div class="column is-4 is-offset-4">
+            <h3 class="title">Login</h3>
+            <div class="box">
+                <form method="POST" action="/login">
+                    <div class="field">
+                        <div class="control">
+                            <input class="form-control form-control-lg py-3 mb-3" type="email" name="email" placeholder="Your Email" autofocus="">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <div class="control">
+                            <input class="form-control form-control-lg py-3 mb-3" type="password" name="password" placeholder="Your Password">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="form-check-label py-2">
+                            <input class="form-check-input" type="checkbox" value="" checked=""> Remember me
+                            <br>
+                        </label>
+                    </div>
+                    <button class="buttondetail px-5 py-3 btn">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-5">
+      <!-- <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />-->
+    </div>
+  </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}
