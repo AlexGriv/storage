@@ -34,14 +34,14 @@
             </li>
             <li class="nav-item">
               {% if current_user.is_authenticated %}
-              <a class="nav-link" href="{{ url_for('add_opinion_view') }}">
-                Добавить мнение о фильме
+              <a class="nav-link" href="{{ url_for('add_article_view') }}">
+                Добавить статью
               </a>
               {% endif %}
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('random') }}">
-                Хочу другой фильм
+                Хочу другую статью
               </a>
             </li>
           </ul>

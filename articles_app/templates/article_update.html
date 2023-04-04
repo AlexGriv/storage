@@ -4,7 +4,7 @@
 <main>
   <section class="container my-5">
     <div class="row">
-      <h1>Редактировать мнение о фильме</h1>
+      <h1>Редактировать статью</h1>
       <div class="col-12 col-lg-7 my-5">
         <form method="POST" novalidate>
           {{ form.csrf_token }}
@@ -16,7 +16,9 @@
               {% endfor %}
             {% endif %}
           </p>
-          {{ form.source(class="form-control form-control-lg py-3 mb-3", placeholder=form.source.label.text) }}
+          {{ form.intro(class="form-control form-control-lg py-3 mb-3", placeholder=form.intro.label.text) }}
+          <p></p>
+          {{ form.prog_lang(class="form-control form-control-lg py-3 mb-3", placeholder=form.prog_lang.label.text) }}
           <p></p>
           {{ form.text(class="form-control form-control-lg py-3 mb-3", placeholder=form.text.label.text, rows="3", cols="40")}}
           <p>
