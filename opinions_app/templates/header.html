@@ -7,29 +7,37 @@
         <div class="d-flex justify-content-left">
           <ul class="nav nav-pills">
             <li class="nav-item">
+              {% if current_user.is_authenticated %}
               <a class="nav-link" href="{{ url_for('profile') }}">
-                Profile
+                {{ name }}
               </a>
+              {% endif %}
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('login') }}">
+              {% if not current_user.is_authenticated %}
+              <a class="nav-link" href="{{ url_for('auth.login') }}">
                 Login
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('signup') }}">
+              <a class="nav-link" href="{{ url_for('auth.signup') }}">
                 Sign Up
               </a>
+              {% endif %}
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('logout') }}">
+              {% if current_user.is_authenticated %}
+              <a class="nav-link" href="{{ url_for('auth.logout') }}">
                 Logout
               </a>
+              {% endif %}
             </li>
             <li class="nav-item">
+              {% if current_user.is_authenticated %}
               <a class="nav-link" href="{{ url_for('add_opinion_view') }}">
                 Добавить мнение о фильме
               </a>
+              {% endif %}
             </li>
             <li class="nav-item">
               <a class="nav-link" href="{{ url_for('random') }}">

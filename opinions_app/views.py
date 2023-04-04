@@ -1,9 +1,10 @@
 from random import randrange
-from flask import abort, flash, redirect, render_template, url_for
+from flask import abort, flash, redirect, request, render_template, url_for
+from flask_login import login_required, current_user, login_user
 
 from . import app, db
 from .forms import OpinionForm, OpinionFormUpdate
-from .models import Opinion
+from .models import Opinion, User
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -15,23 +16,9 @@ def index_view():
 
 
 @app.route('/profile')
+@login_required
 def profile():
-    return render_template('profile.html')
-
-
-@app.route('/login')
-def login():
-    return render_template('login.html')
-
-
-@app.route('/signup')
-def signup():
-    return render_template('signup.html')
-
-
-@app.route('/logout')
-def logout():
-    return 'Logout'
+    return render_template('profile.html', name=current_user.name)
 
 
 @app.route('/random')
