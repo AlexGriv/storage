@@ -1,6 +1,6 @@
 from random import randrange
-from flask import abort, flash, redirect, request, render_template, url_for
-from flask_login import login_required, current_user, login_user
+from flask import abort, flash, redirect, request, render_template, url_for, session
+from flask_login import login_required, current_user, login_user, AnonymousUserMixin
 
 from . import app, db
 from .forms import ArticleForm, ArticleFormUpdate
@@ -9,20 +9,19 @@ from .models import Article, User
 
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
-    #if current_user.name != None:
-    #    article = Article.query.order_by(Article.timestamp.desc()).all()
-    #    return render_template('articles.html', article=article, name=current_user.name)
-    #else:
-    #    article = Article.query.order_by(Article.timestamp.desc()).all()
-    #    return render_template('articles.html', article=article)
     article = Article.query.order_by(Article.timestamp.desc()).all()
     return render_template('articles.html', article=article)
 
 
-@app.route('/profile')
-@login_required
-def profile():
-    return render_template('profile.html', name=current_user.name)
+@app.route('/user/<id>', methods=['GET', 'POST'])
+def profile(id):
+    title = 'Ваша страница'
+    user = User.query.filter_by(id=id).first_or_404()
+    if user == None:
+        flash('Пользователь ' + user.username + ' не найден.')
+        return redirect(url_for('index'))
+    article = user.article.order_by(Article.timestamp.desc()).all()
+    return render_template('profile.html', title=title, user=user, article=article)
 
 
 @app.route('/random')
@@ -34,7 +33,7 @@ def random():
     article = Article.query.offset(offset_value).first()
     if not article:
         abort(404)
-    return render_template('article.html', article=article, name=current_user.name)
+    return render_template('article.html', article=article)
 
 
 @app.route('/add', methods=['GET', 'POST'])
@@ -49,7 +48,8 @@ def add_article_view():
             title=form.title.data,
             intro=form.intro.data,
             text=form.text.data,
-            prog_lang=form.prog_lang.data
+            prog_lang=form.prog_lang.data,
+            user_id=current_user.id
         )
         db.session.add(article)
         db.session.commit()
@@ -60,7 +60,7 @@ def add_article_view():
 @app.route('/articles/<int:id>')
 def article_view(id):
     article = Article.query.get_or_404(id)
-    return render_template('article.html', article=article, name=current_user.name)
+    return render_template('article.html', article=article)
 
 
 @app.route('/articles/<int:id>/delete')
@@ -80,9 +80,10 @@ def article_update(id):
     form = ArticleFormUpdate()
     if form.validate_on_submit():
         article.title = form.title.data
-        article.intro =form.intro.data
+        article.intro = form.intro.data
         article.text = form.text.data
-        article.prog_lang =form.prog_lang.data
+        article.prog_lang = form.prog_lang.data
+        article.user_id = current_user.id
         try:
             db.session.commit()
             return redirect('/')

@@ -7,24 +7,24 @@
       <div class="col-12 col-lg-9 my-5">
         <div class="alert alert-light">
         <h1>{{ article.title }}</h1>
-        <p>{{ article.timestamp.date() }} {{ name }} </p>
+        <p>{{ article.timestamp.date() }}</p>
         <p>{{ article.text }}</p>
-        <p>
-          Больше о фильме:
-          {% if article.source %}
-            <a href="{{ article.source }}">{{ article.source }}</a>
-          {% else %} источник не указан {% endif %}
-        </p>
+        <p>{{ article.author.username}}</p>
+ 
         <p>Ссылка для друзей: <a href="{{ url_for('article_view', id=article.id, _external=True) }}">{{ url_for('article_view', id=article.id, _external=True) }}</a></p>
           <div class="d-flex justify-content-left">
             <ul class="nav nav-pills">
               <li class="nav-item pe-5">
+                {% if current_user.is_authenticated %}
                 <a href="/articles/{{article.id}}/delete"><button class="buttondetail px-3 py-2 btn">Удалить</button>
                   </a>
+                  {% endif %}
                   </li>
                   <li class="nav-item pe-5">
+                {% if current_user.is_authenticated %}
                 <a href="/articles/{{article.id}}/update"><button class="buttondetail px-3 py-2 btn">Редактировать</button>
                   </a>
+                  {% endif %}
                   </li>
           </div>
       </div>

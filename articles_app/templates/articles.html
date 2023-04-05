@@ -9,8 +9,10 @@
           {% for items in article %}
           <div class="alert alert-light">
             <h1>{{ items.title }}</h1>
-            <p>{{ items.timestamp.date()}}  {{ name }} </p>
+            <p>{{ items.timestamp.date()}} </p>
             <p>{{ items.text }}</p>
+            <p><a class="nav-link" href="/user/{{items.user_id}}">
+              {{ items.author.username}}</a></p>
             <p>
               <a href="/articles/{{items.id}}">
                 <button class="buttondetail px-3 py-2 btn">Подробнее</button>
@@ -18,7 +20,7 @@
             </p>
           </div>
             <hr>
-          {% endfor %}
+            {% endfor %}
         {% else %}
         <p>У нас ещё нет статей на сайте</p>
         {% endif %}
