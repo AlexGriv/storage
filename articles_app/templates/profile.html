@@ -5,13 +5,13 @@
   <section class="container my-5">
     <div class="row">
       <div class="col-12 col-lg-9 my-5">
-        <h1 class="title">
-          Welcome, {{current_user.username}}
+        <h2 class="title">
+          Профиль {{ article[0].author.username }}
           {% if article|length > 0 %}
           {% for items in article %}
           <div class="alert alert-light">
             <h1>{{ items.title }}</h1>
-            <p>{{ items.timestamp.date()}} </p>
+            <p>{{ items.timestamp.date() }} </p>
             <p>{{ items.text }}</p>
             <p>
               <a href="/articles/{{items.id}}">

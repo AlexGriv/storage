@@ -9,8 +9,8 @@
         <h1>{{ article.title }}</h1>
         <p>{{ article.timestamp.date() }}</p>
         <p>{{ article.text }}</p>
-        <p>{{ article.author.username}}</p>
- 
+        <p><a class="nav-link" href="/user/{{ article.author.id }}">
+          {{ article.author.username}}</a></p>
         <p>Ссылка для друзей: <a href="{{ url_for('article_view', id=article.id, _external=True) }}">{{ url_for('article_view', id=article.id, _external=True) }}</a></p>
           <div class="d-flex justify-content-left">
             <ul class="nav nav-pills">
