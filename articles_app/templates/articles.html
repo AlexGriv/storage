@@ -11,7 +11,7 @@
             <h1>{{ items.title }}</h1>
             <p>{{ items.timestamp.date()}} </p>
             <p>{{ items.text }}</p>
-            <p><a class="nav-link" href="/user/{{items.user_id}}">
+            <p><a class="nav-link" href="/user/{{items.author.username}}">
               {{ items.author.username}}</a></p>
             <p>
               <a href="/articles/{{items.id}}">

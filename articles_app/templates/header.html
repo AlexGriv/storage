@@ -10,7 +10,7 @@
 
               {% if current_user.is_authenticated %}
 
-              <a class="nav-link" href="/user/{{current_user.id}}">
+              <a class="nav-link" href="/user/{{current_user.username}}">
               {{current_user.username}}
               </a>
 

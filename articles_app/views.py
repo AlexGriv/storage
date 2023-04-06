@@ -13,10 +13,10 @@ def index_view():
     return render_template('articles.html', article=article)
 
 
-@app.route('/user/<id>', methods=['GET', 'POST'])
-def profile(id):
+@app.route('/user/<username>', methods=['GET', 'POST'])
+def profile(username):
     title = 'Ваша страница'
-    user = User.query.filter_by(id=id).first_or_404()
+    user = User.query.filter_by(username=username).first_or_404()
     if user == None:
         flash('Пользователь ' + user.username + ' не найден.')
         return redirect(url_for('index'))
