@@ -1,11 +1,27 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, flash, render_template, redirect, url_for, request
 from flask_login import login_user, logout_user, login_required
-from .models import User
+from .models import Article, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from . import app, db
 
 
 auth = Blueprint('auth', __name__)
+
+
+@auth.route('/user/<username>', methods=['GET', 'POST'])
+def profile(username, page=1):
+
+    user = User.query.filter_by(username=username).first_or_404()
+    if user == None:
+        flash('Пользователь ' + user.username + ' не найден.')
+        return redirect(url_for('index'))
+    page = request.args.get('page', 1, type=int)
+    title = 'Ваша страница'
+
+    article = user.article.order_by(Article.timestamp.desc()).paginate(page=page, per_page=5)
+    count = article.total
+
+    return render_template('profile.html', title=title, user=user, article=article, count=count, page=page)
 
 
 @auth.route('/login')

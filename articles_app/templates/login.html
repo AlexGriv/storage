@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Login{%endblock %}
+{% block title %} Login {%endblock %}
 {% block content %}
 <main>
   <section class="container my-5">
@@ -7,8 +7,7 @@
         <div class="col-12 col-lg-7 my-5">
         <div class="column is-4 is-offset-4">
             <h3 class="title">Login</h3>
-            <div class="box">
-                     {% with messages = get_flashed_messages() %}
+            {% with messages = get_flashed_messages() %}
                         {% if messages %}
                             <div class="notification is-danger">
                                 <p class="py-3 mb-3 text-danger">
@@ -17,7 +16,8 @@
                             </div>
                         {% endif %}
                         {% endwith %}
-                        <form method="POST" action="/login">
+            <div class="box">
+                  <form method="POST" action="/login">
                     <div class="field">
                         <div class="control">
                             <input class="form-control form-control-lg py-3 mb-3" type="email" name="email" placeholder="Your Email" autofocus="">

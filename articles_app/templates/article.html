@@ -1,32 +1,42 @@
 {% extends "base.html" %}
-{% block title %}Мнение о фильме # {{ article.id }}{%endblock %}
+{% block title %} {{ article.intro }}{% endblock %}
 {% block content %}
 <main>
   <section class="container my-5">
     <div class="row">
       <div class="col-12 col-lg-9 my-5">
-        <div class="alert alert-light">
+        <div class="">
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+              <div class="notification is-danger">
+                <p class="py-3 mb-3 text-danger">
+                  {{ messages[0] }}
+                </p>
+               </div>
+              {% endif %}
+            {% endwith %}
+              </div>
         <h1>{{ article.title }}</h1>
         <p>{{ article.timestamp.date() }}</p>
         <p>{{ article.text }}</p>
-        <p><a class="nav-link" href="/user/{{ article.author.username }}">
+        <p><a class="nav-link" href="{{ url_for('auth.profile', username=article.author.username) }}">
           {{ article.author.username}}</a></p>
         <p>Ссылка для друзей: <a href="{{ url_for('article_view', id=article.id, _external=True) }}">{{ url_for('article_view', id=article.id, _external=True) }}</a></p>
           <div class="d-flex justify-content-left">
             <ul class="nav nav-pills">
               <li class="nav-item pe-5">
-                {% if current_user.is_authenticated %}
+                {% if article.author == current_user %}
                 <a href="/articles/{{article.id}}/delete"><button class="buttondetail px-3 py-2 btn">Удалить</button>
                   </a>
                   {% endif %}
                   </li>
                   <li class="nav-item pe-5">
-                {% if current_user.is_authenticated %}
+                  {% if article.author == current_user %}
                 <a href="/articles/{{article.id}}/update"><button class="buttondetail px-3 py-2 btn">Редактировать</button>
                   </a>
                   {% endif %}
                   </li>
-          </div>
+
       </div>
       <div class="col-12 col-lg-3">
         <!-- <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />-->

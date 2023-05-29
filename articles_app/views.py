@@ -9,19 +9,10 @@ from .models import Article, User
 
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
-    article = Article.query.order_by(Article.timestamp.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    article = Article.query.order_by(Article.timestamp.desc()).paginate(page=page, per_page=5)
+    # article = Article.query.order_by(Article.timestamp.desc()).all()
     return render_template('articles.html', article=article)
-
-
-@app.route('/user/<username>', methods=['GET', 'POST'])
-def profile(username):
-    title = 'Ваша страница'
-    user = User.query.filter_by(username=username).first_or_404()
-    if user == None:
-        flash('Пользователь ' + user.username + ' не найден.')
-        return redirect(url_for('index'))
-    article = user.article.order_by(Article.timestamp.desc()).all()
-    return render_template('profile.html', title=title, user=user, article=article)
 
 
 @app.route('/random')
@@ -57,23 +48,6 @@ def add_article_view():
     return render_template('add_article.html', form=form)
 
 
-@app.route('/articles/<int:id>')
-def article_view(id):
-    article = Article.query.get_or_404(id)
-    return render_template('article.html', article=article)
-
-
-@app.route('/articles/<int:id>/delete')
-def article_delete(id):
-    article = Article.query.get_or_404(id)
-    try:
-        db.session.delete(article)
-        db.session.commit()
-        return redirect('/')
-    except:
-        return "При удалении произошла ошибка"
-
-
 @app.route('/articles/<int:id>/update', methods=['GET', 'POST'])
 def article_update(id):
     article = Article.query.get(id)
@@ -92,3 +66,24 @@ def article_update(id):
 
     else:
         return render_template('article_update.html', article=article, form=form)
+
+
+@app.route('/articles/<int:id>')
+def article_view(id):
+    article = Article.query.get_or_404(id)
+    return render_template('article.html', article=article)
+
+
+@app.route('/articles/<int:id>/delete')
+def article_delete(id):
+    article = Article.query.get_or_404(id)
+    if article.author != current_user:
+        flash('Нельзя удалять чужие статьи', 'danger')
+        return render_template('article.html', article=article)
+    else:
+        try:
+            db.session.delete(article)
+            db.session.commit()
+            return redirect('/')
+        except:
+            return "При удалении произошла ошибка"

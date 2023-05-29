@@ -1,34 +1,51 @@
 {% extends "base.html" %}
-{% block title %}Все статьи {%endblock %}
+{% block title %} Все статьи {%endblock %}
 {% block content %}
 <main>
   <section class="container my-5">
     <div class="row">
       <div class="col-12 col-lg-9 my-5">
-        {% if article|length > 0 %}
-          {% for items in article %}
-          <div class="alert alert-light">
-            <h1>{{ items.title }}</h1>
-            <p>{{ items.timestamp.date()}} </p>
+
+        <!-- All article view block-->
+          {% for items in article.items %}
+          <h1>{{ items.title }}</h1>
+            <p>{{ items.timestamp.date() }}</p>
             <p>{{ items.text }}</p>
-            <p><a class="nav-link" href="/user/{{items.author.username}}">
-              {{ items.author.username}}</a></p>
-            <p>
-              <a href="/articles/{{items.id}}">
-                <button class="buttondetail px-3 py-2 btn">Подробнее</button>
-              </a>
-            </p>
-          </div>
+            <p><a class="nav-link" href="/user/{{items.author.username}}">{{ items.author.username}}</a></p>
+            <p><a href="/articles/{{items.id}}"><button class="buttondetail px-3 py-2 btn">Подробнее</button></a></p>
             <hr>
             {% endfor %}
-        {% else %}
-        <p>У нас ещё нет статей на сайте</p>
-        {% endif %}
+        <!-- All article view end-->
+
+
+        <!-- Pagination block-->
+        <div class="align-content-center">
+          <ul class="pagination pagination-lg ">
+           {% for page in article.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2 )%}
+            {% if page %}
+              {% if article.page == page %}
+              <li class="page-item active"><a class="page-link active" href="">{{ page }}</a></li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="{{ url_for('index_view', page=page) }}">{{ page }}</a></li>
+              {% endif %}
+            {% else %}
+              ...
+            {% endif %}
+          {% endfor %}
+        </ul>
+        </div>
+        <!-- Pagination end-->
+
+
       </div>
+
+      <!-- accaunt info block-->
       <div class="col-12 col-lg-3">
         <!-- <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />-->
       </div>
-    </div>
+      <!-- account info end-->
+
+
   </section>
 </main>
 {% endblock %}
