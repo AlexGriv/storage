@@ -4,20 +4,21 @@
 <main>
   <section class="container my-5">
     <div class="row">
-      <div class="col-12 col-lg-9 my-5">
-        <p>Количество статей пользователя: {{ count }} <a class="" href="">Показать</a></p>
-
+      <div class="col-12 col-lg-9">
           {% for items in article.items %}
-            <h1>{{ items.title }}</h1>
-            <p>{{ items.timestamp.date() }}</p>
-            <p>{{ items.text }}</p>
-            <p><a href="/articles/{{items.id}}"><button class="buttondetail px-3 py-2 btn">Подробнее</button></a></p>
-            <hr>
+            <h2 class="d-flex flex-row justify-content-center">{{ items.title }} {{ items.timestamp.date() }}</h2>
+            <p class="px-2"></p>
+            <div class="text-block px-2 py-2">{{ items.text|safe }}</div>
+            {% if user.username == current_user.username %}
+            <p class="px-2 py-2"><a href="/articles/{{items.id}}"><button class="buttondetail px-2 py-2 btn">Редактировать</button></a></p>
+            {% endif %}
+            <!--<hr>-->
             {% endfor %}
 
         <!-- Pagination block-->
-        <div class="align-content-center">
-          <ul class="pagination pagination-lg ">
+        <div class="">
+
+          <ul class="pagination pagination-ls px-2 py-2">
            {% for page in article.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2 )%}
             {% if page %}
               {% if article.page == page %}
@@ -29,15 +30,16 @@
               ...
             {% endif %}
           {% endfor %}
-        </ul>
+                  </ul>
         </div>
         <!-- Pagination end-->
 
 
       </div>
-      <div class="col-12 col-lg-3">
-        <h1>Профиль {{ user.username }}</h1>
-        <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />
+      <div class="col-12 col-lg-3 text-center">
+        <p class="mx-5"><a class="nav-link" href="{{ url_for('auth.profile', username=user.username) }}">Профиль {{ user.username }}</a></p>
+        <p>Количество статей пользователя: {{ count }} <a class="" href="">Показать</a></p>
+        <img class="img-fluid d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />
       </div>
     </div>
   </section>

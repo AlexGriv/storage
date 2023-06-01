@@ -5,47 +5,47 @@
   <section class="container my-5">
     <div class="row">
       <h1>Редактировать статью</h1>
-      <div class="col-12 col-lg-7 my-5">
-        <form method="POST" novalidate>
-          {{ form.csrf_token }}
-          {{ form.title(class="form-control form-control-lg py-3 mb-3", placeholder=form.title.label.text) }}
-          <p>
-            {% if form.title.errors %}
-              {% for error in form.title.errors %}
-                <span style="color: red">{{ error }}</span>
-              {% endfor %}
-            {% endif %}
-          </p>
-          {{ form.intro(class="form-control form-control-lg py-3 mb-3", placeholder=form.intro.label.text) }}
-          <p></p>
-          {{ form.prog_lang(class="form-control form-control-lg py-3 mb-3", placeholder=form.prog_lang.label.text) }}
-          <p></p>
-          {{ form.text(class="form-control form-control-lg py-3 mb-3", placeholder=form.text.label.text, rows="3", cols="40")}}
-          <p>
-            {% if form.text.errors %}
-              {% for error in form.text.errors %}
-                <span style="color: red">{{ error }}</span>
-              {% endfor %}
-            {% endif %}
-          </p>
-          {{ form.submit(class="buttondetail px-5 py-3 btn") }}
-        </form>
-        <p class="py-3 mb-3">
-          {% with messages = get_flashed_messages() %}
-            {% if messages %}
-              {% for message in messages %}
-                {{ message }}
-              {% endfor %}
-            {% endif %}
-          {% endwith %}
-        </p>
+      <div class="col-12 col-lg-7">
+        <div class="ArticleFormUpdate">
+          <form method="POST" novalidate>
+            {{ form.csrf_token }}
+            {{ form.title(class="form-control form-control-lg py-3 mb-3", placeholder=article.title)}}
+            <p>
+              {% if form.title.errors %}
+                {% for error in form.title.errors %}
+                  <span style="color: red">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
+            </p>
+            {{ form.intro(class="form-control form-control-lg py-3 mb-3", placeholder=article.intro) }}
+            <p></p>
+            {{ form.prog_lang(class="form-control form-control-lg py-3 mb-3", placeholder=article.prog_lang) }}
+            <p>
+              {% if form.prog_lang.errors %}
+                {% for error in form.prog_lang.errors %}
+                  <span style="color: red">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
+            </p>
+            <span contenteditable="true">
+            {{ form.text(class="form-control form-control-lg py-3 mb-3", placeholder=article.text , rows="3", cols="40")}}
+          </span>
+            <p>
+              {% if form.text.errors %}
+                {% for error in form.text.errors %}
+                  <span style="color: red">{{ error }}</span>
+                {% endfor %}
+              {% endif %}
+            </p>
+            {{ form.submit(class="buttondetail px-5 py-3 btn") }}
+          </form>
+          {{ ckeditor.load(pkg_type="full") }}
+          {{ ckeditor.config(name='body') }}
+
+          </div>
         </div>
       <div class="col-12 col-lg-5">
-        <!--<img
-          class="img-fluid mx-auto d-block"
-          src="{{ url_for('static', filename='img/illustration.png') }}"
-          alt=""
-        />-->
+
       </div>
     </div>
   </section>

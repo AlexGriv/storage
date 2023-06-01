@@ -4,48 +4,48 @@
 <main>
   <section class="container my-5">
     <div class="row">
-        <div class="col-12 col-lg-7 my-5">
-        <div class="column is-4 is-offset-4">
-            <h3 class="title">Login</h3>
-            {% with messages = get_flashed_messages() %}
-                        {% if messages %}
-                            <div class="notification is-danger">
-                                <p class="py-3 mb-3 text-danger">
-                                    {{ messages[0] }}
-                                </p>
-                            </div>
-                        {% endif %}
-                        {% endwith %}
-            <div class="box">
-                  <form method="POST" action="/login">
-                    <div class="field">
-                        <div class="control">
-                            <input class="form-control form-control-lg py-3 mb-3" type="email" name="email" placeholder="Your Email" autofocus="">
-                        </div>
+        <h1 class="title">Login</h1>
+        <div class="col-12 col-lg-7">
+            <form method="POST" novalidate>
+                {{ form.csrf_token }}
+                <div class="row">
+                <div class="form-group col-12 col-lg-6">
+                    {% if form.email.errors %}
+                    {{ form.email(class='form-control form-control-sm py-3 mb-1 is-invalid', placeholder="Email") }}
+                  <div class="invalid-feedback">
+                    {% for errors in form.email.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
                     </div>
+                    {% else %}
+                        {{form.email(class='form-control form-control-sm py-3 mb-1', placeholder="Email") }}
+                    {% endif %}
 
-                    <div class="field">
-                        <div class="control">
-                            <input class="form-control form-control-lg py-3 mb-3" type="password" name="password" placeholder="Your Password">
-                        </div>
+
+                  {% if form.password.errors %}
+                    {{ form.password(class='form-control form-control-sm py-3 mb-1 is-invalid', placeholder="password") }}
+                  <div class="invalid-feedback">
+                    {% for errors in form.password.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
                     </div>
-                    <div class="field">
-                        <label class="form-check-label py-2">
-                            <input class="form-check-input" type="checkbox" value="" checked=""> Remember me
-                            <br>
-                        </label>
-                    </div>
-                    <button class="buttondetail px-5 py-3 btn">Login</button>
-                </form>
+                    {% else %}
+                        {{form.password(class='form-control form-control-sm py-3 mb-1', placeholder="password") }}
+                    {% endif %}
+                </div>
+                <div class="form-check">
+                {{ form.remember(class='form-check-input')}}
+                {{ form.remember.label(class='form-check-label')}}
+                </div>
+                <div class="form-group">{{ form.submit(class='btn btn-primary')}}</div>
             </div>
+            </form>
+
         </div>
-    </div>
     <div class="col-12 col-lg-5">
       <!-- <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />-->
     </div>
   </div>
-      </div>
-    </div>
   </section>
 </main>
 {% endblock %}

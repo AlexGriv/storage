@@ -1,0 +1,40 @@
+        <h3 class="title">Sign in</h3>
+        <div class="text-center" >
+            <form class="px-4 py-3" method="POST" novalidate>
+                {{ form.csrf_token }}
+                  <div class="form-group">
+                    {% if form.email.errors %}
+                    {{ form.email(class='is-invalid', placeholder="Email") }}
+                  <div class="invalid-feedback">
+                    {% for errors in form.email.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                    {% else %}
+                    <label for="exampleDropdownFormEmail1">Email address</label>
+                        {{form.email(class='form-control', placeholder="email") }}
+                    {% endif %}
+
+
+                  {% if form.password.errors %}
+                    {{ form.password(class='is-invalid', placeholder="password") }}
+                  <div class="invalid-feedback">
+                    {% for errors in form.password.errors %}
+                    <span>{{ error }}</span>
+                    {% endfor %}
+                    </div>
+                    {% else %}
+                    <label for="exampleDropdownFormPassword1">Password</label>
+                        {{form.password(class='form-control', placeholder="password") }}
+                    {% endif %}
+                </div>
+                <div class="form-check">
+                {{ form.remember(class='form-check-input')}}
+                {{ form.remember.label(class='form-check-label')}}
+                </div>
+                <a class="" href="">
+                    <div class="my-1 form-group">{{ form.submit(class='btn btn-primary')}}</div>
+                </a>
+                <a class="my-1 nav-link" href="{{ url_for('auth.signup') }}">New around here? Sign up</a>
+                <a class="my-1 nav-link" href="#">Forgot password?</a>
+            </form>

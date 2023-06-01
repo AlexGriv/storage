@@ -4,23 +4,27 @@
 <main>
   <section class="container my-5">
     <div class="row">
-      <div class="col-12 col-lg-9 my-5">
+      <div class="col-12 col-lg-9">
 
         <!-- All article view block-->
           {% for items in article.items %}
-          <h1>{{ items.title }}</h1>
-            <p>{{ items.timestamp.date() }}</p>
-            <p>{{ items.text }}</p>
-            <p><a class="nav-link" href="/user/{{items.author.username}}">{{ items.author.username}}</a></p>
-            <p><a href="/articles/{{items.id}}"><button class="buttondetail px-3 py-2 btn">Подробнее</button></a></p>
-            <hr>
+          <h2>{{ items.title }}</h2>
+          <div class="d-flex p-2 bd-highlight p-3 border">
+            <a class="nav-link mx-1" href="/user/{{items.author.username}}">{{ items.author.username }}</a>
+            {{ items.timestamp.date() }}</div>
+            {% if items.intro %}
+            <div class="d-flex p-2 bd-highlight p-3 px-4 border">{{ items.intro }}</div>
+            {% endif%}
+            <div class="d-flex p-2 bd-highlight p-3 border"><a href="/articles/{{items.id}}"><button class="buttondetail px-3 py-2 btn">Подробнее</button></a></p></div>
+            <p></p>
+            <!--<hr>-->
             {% endfor %}
         <!-- All article view end-->
 
 
         <!-- Pagination block-->
-        <div class="align-content-center">
-          <ul class="pagination pagination-lg ">
+        <div class="text-center">
+          <ul class="pagination pagination-lm">
            {% for page in article.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2 )%}
             {% if page %}
               {% if article.page == page %}
@@ -40,8 +44,12 @@
       </div>
 
       <!-- accaunt info block-->
-      <div class="col-12 col-lg-3">
-        <!-- <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />-->
+      <div class="col-12 col-lg-3 my-3 text-center">
+        {% if current_user.is_authenticated %}
+          {% include "profile_sm.html" %}
+        {% else %}
+          {% include "login_sm.html" %}
+        {% endif %}
       </div>
       <!-- account info end-->
 

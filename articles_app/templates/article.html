@@ -4,7 +4,7 @@
 <main>
   <section class="container my-5">
     <div class="row">
-      <div class="col-12 col-lg-9 my-5">
+      <div class="col-12 col-lg-9">
         <div class="">
             {% with messages = get_flashed_messages() %}
               {% if messages %}
@@ -16,21 +16,25 @@
               {% endif %}
             {% endwith %}
               </div>
-        <h1>{{ article.title }}</h1>
-        <p>{{ article.timestamp.date() }}</p>
-        <p>{{ article.text }}</p>
-        <p><a class="nav-link" href="{{ url_for('auth.profile', username=article.author.username) }}">
-          {{ article.author.username}}</a></p>
-        <p>Ссылка для друзей: <a href="{{ url_for('article_view', id=article.id, _external=True) }}">{{ url_for('article_view', id=article.id, _external=True) }}</a></p>
-          <div class="d-flex justify-content-left">
+        <h2 class="d-flex flex-row justify-content-center">{{ article.title }}</h2>
+        <div class="d-flex flex-row justify-content-center">
+          <div class="p-2""><a class="nav-link" href="{{ url_for('auth.profile', username=article.author.username) }}">{{ article.author.username }}</a></div>
+          <div class="p-2">{{ article.timestamp.date() }}</div>
+          <div class="p-2">{{ article.prog_lang }}</div>
+        </div>
+          <p></p>
+          <div class="text-block px-2 py-2">{{ article.text|safe }}</div>
+
+
+          <div class="d-flex justify-content-left px-2 py-2">
             <ul class="nav nav-pills">
-              <li class="nav-item pe-5">
+              <li class="nav-item pe-3">
                 {% if article.author == current_user %}
                 <a href="/articles/{{article.id}}/delete"><button class="buttondetail px-3 py-2 btn">Удалить</button>
                   </a>
                   {% endif %}
                   </li>
-                  <li class="nav-item pe-5">
+                  <li class="nav-item pe-3">
                   {% if article.author == current_user %}
                 <a href="/articles/{{article.id}}/update"><button class="buttondetail px-3 py-2 btn">Редактировать</button>
                   </a>
@@ -39,7 +43,6 @@
 
       </div>
       <div class="col-12 col-lg-3">
-        <!-- <img class="img-fluid mx-auto d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />-->
       </div>
     </div>
   </section>
