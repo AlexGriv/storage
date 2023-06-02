@@ -1,4 +1,4 @@
-# from random import randrange
+import datetime
 from flask import abort, flash, redirect, request, render_template, url_for, session
 from flask_login import login_required, current_user, login_user, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -8,10 +8,10 @@ from .forms import ArticleForm, ArticleFormUpdate, LoginForm
 from .models import Article, User
 
 
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index_view():
-    # form = LoginForm()
-    user = current_user
     page = request.args.get('page', 1, type=int)
     article = Article.query.order_by(Article.timestamp.desc()).paginate(page=page, per_page=5)
     # article = Article.query.order_by(Article.timestamp.desc()).all()
@@ -27,10 +27,11 @@ def index_view():
         else:
             flash('Не удалось войти, проверьте почту или пароль', 'danger')
 
-    return render_template('articles.html', article=article, user=user, form=form)
+    return render_template('articles.html', article=article, user=current_user, form=form)
 
 
 @app.route('/add', methods=['GET', 'POST'])
+@login_required
 def add_article_view():
     user = current_user
     form = ArticleForm()
@@ -54,6 +55,7 @@ def add_article_view():
 
 
 @app.route('/articles/<int:id>/update', methods=['GET', 'POST'])
+@login_required
 def article_update(id):
     article = Article.query.get_or_404(id)
     if article.author != current_user:
@@ -86,6 +88,7 @@ def article_view(id):
 
 
 @app.route('/articles/<int:id>/delete')
+@login_required
 def article_delete(id):
     article = Article.query.get_or_404(id)
     if article.author != current_user:

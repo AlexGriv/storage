@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from settings import Config
 from flask_ckeditor import CKEditor
 
+
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)

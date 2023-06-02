@@ -8,15 +8,31 @@
 
         <!-- All article view block-->
           {% for items in article.items %}
-          <h2>{{ items.title }}</h2>
-          <div class="d-flex p-2 bd-highlight p-3 border">
-            <a class="nav-link mx-1" href="/user/{{items.author.username}}">{{ items.author.username }}</a>
-            {{ items.timestamp.date() }}</div>
-            {% if items.intro %}
-            <div class="d-flex p-2 bd-highlight p-3 px-4 border">{{ items.intro }}</div>
-            {% endif%}
-            <div class="d-flex p-2 bd-highlight p-3 border"><a href="/articles/{{items.id}}"><button class="buttondetail px-3 py-2 btn">Подробнее</button></a></p></div>
+          <h2 >{{ items.title }}</h2>
+          <div class="d-flex p-2 bd-highlight p-3 border-0">
+            <a class="nav-link mx-1 px-1" href="/user/{{items.author.username}}">{{ items.author.username }}</a>
+            {{ items.timestamp.strftime('%d.%h.%Y.%H:%M') }}</div>
+            <div class="text-block px-2 py-2">{{ items.text|safe }}</div>
+            {% if items.author == current_user %}
+            <div class="d-flex justify-content-left px-2 py-2">
+              <ul class="nav nav-pills">
+                <li class="nav-item pe-3">
+                  <a href="{{ url_for('article_delete', id=items.id) }}"><button class="buttondetail px-3 py-2 btn">Удалить</button>
+                    </a>
+                    </li>
+                    <li class="nav-item pe-3">
+                  <a href="{{ url_for('article_update', id=items.id) }}"><button class="buttondetail px-3 py-2 btn">Редактировать</button>
+                    </a>
+              </li>
+              <li class="nav-item pe-3">
+              <a href="/articles/{{items.id}}"><button class="buttondetail px-3 py-2 btn">Подробнее</button></a></li>
+            </ul>
+            </div>
+            {% else %}
+            <div class="d-flex p-2 bd-highlight p-3 border-0"><a href="/articles/{{items.id}}"><button class="buttondetail px-3 py-2 btn">Подробнее</button></a></div>
             <p></p>
+            {% endif %}
+
             <!--<hr>-->
             {% endfor %}
         <!-- All article view end-->

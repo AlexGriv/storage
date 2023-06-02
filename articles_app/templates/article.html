@@ -18,8 +18,8 @@
               </div>
         <h2 class="d-flex flex-row justify-content-center">{{ article.title }}</h2>
         <div class="d-flex flex-row justify-content-center">
-          <div class="p-2""><a class="nav-link" href="{{ url_for('auth.profile', username=article.author.username) }}">{{ article.author.username }}</a></div>
-          <div class="p-2">{{ article.timestamp.date() }}</div>
+          <div class="p-2""><a class="nav-link mx-1 px-1" href="{{ url_for('auth.profile', username=article.author.username) }}">{{ article.author.username }}</a></div>
+          <div class="p-2">{{ article.timestamp.strftime('%d.%h.%Y.%H:%M') }}</div>
           <div class="p-2">{{ article.prog_lang }}</div>
         </div>
           <p></p>
@@ -39,9 +39,8 @@
                 <a href="/articles/{{article.id}}/update"><button class="buttondetail px-3 py-2 btn">Редактировать</button>
                   </a>
                   {% endif %}
-                  </li>
-
-      </div>
+            </li>
+          </div>
       <div class="col-12 col-lg-3">
       </div>
     </div>

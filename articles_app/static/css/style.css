@@ -53,7 +53,7 @@ p, a {
 }
 a.nav-link, a {
     color: #068ba8;
-
+    border-radius: 0.375rem;
 }
 a.nav-link:visited, a:visited {
     color: #068ba8;
