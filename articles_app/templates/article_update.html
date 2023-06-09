@@ -4,8 +4,8 @@
 <main>
   <section class="container my-5">
     <div class="row">
-      <h1>Редактировать статью</h1>
       <div class="col-12 col-lg-9">
+        <h2>Редактировать статью</h2>
         <div class="ArticleFormUpdate">
           <form method="POST" novalidate>
             {{ form.csrf_token }}
@@ -44,7 +44,12 @@
 
           </div>
         </div>
-      <div class="col-12 col-lg-3">
+        <div class="col-12 col-lg-3 my-3 text-center">
+          {% if current_user.is_authenticated %}
+          {% include "profile_sm.html" %}
+        {% else %}
+          {% include "login_sm.html" %}
+        {% endif %}
 
       </div>
     </div>

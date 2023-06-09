@@ -1,27 +1,74 @@
+import os
+
 from flask import Blueprint, flash, render_template, redirect, url_for, request
-from flask_login import login_user, logout_user, login_required
+from flask_login import current_user, login_user, logout_user, login_required
 from .models import Article, User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import app, db
-from .forms import LoginForm
+from . import db
+from .forms import LoginForm, SignupForm, AccountUpdateForm
+from .utils import picture_path
+
 
 
 auth = Blueprint('auth', __name__)
+full_path_default = 'static/'+ 'profile_pics'
 
 
 @auth.route('/user/<username>', methods=['GET', 'POST'])
 def profile(username, page=1):
-
     user = User.query.filter_by(username=username).first_or_404()
-    if user == None:
-        flash('Пользователь ' + user.username + ' не найден.')
-        return redirect(url_for('index'))
     page = request.args.get('page', 1, type=int)
-
     article = user.article.order_by(Article.timestamp.desc()).paginate(page=page, per_page=5)
     count = article.total
-    return render_template('profile.html', user=user, article=article, count=count, page=page)
+    form = AccountUpdateForm()
+    if not current_user.is_anonymous:
+        if request.method == 'GET':
+            form.username.data = current_user.username
+            form.email.data = current_user.email
+            form.image_file.data = current_user.image_file
 
+
+        elif form.validate_on_submit():
+            current_user.username = form.username.data
+            current_user.email = form.email.data
+            if form.image_file.data == None:
+                form.image_file = current_user.image_file
+            else:
+                username = form.username.data
+                current_user.image_file = picture_path(form.image_file.data)
+
+
+            db.session.commit()
+            flash('Your account has been updated', 'Success')
+            return redirect(url_for('auth.profile', username=current_user.username))
+    user_id = str(user.id)
+
+    return render_template('profile.html', form=form, user_id=user_id, user=user, article=article, count=count, page=page)
+
+
+@auth.route('/signup', methods=['GET','POST'])
+def signup():
+    if current_user.is_authenticated:
+        return redirect (url_for('index_view'))
+    form = SignupForm()
+    if form.validate_on_submit():
+        hashed_password = generate_password_hash(form.password.data)
+        user = User(
+            username=form.username.data,
+            email=form.email.data,
+            password=hashed_password,
+        )
+        db.session.add(user)
+        db.session.commit()
+        full_path = os.path.join(os.getcwd(), 'articles_app/static', 'profile_pics', user.username)
+        if not os.path.exists(full_path):
+            os.mkdir(full_path)
+
+        #shutil.copy(f'{os.getcwd()}/articles_app/static/profile_pics/default.jpg', full_path)
+        flash('Your account has been created', 'success')
+        return redirect(url_for('index_view'))
+
+    return render_template('signup.html', form=form, full_path_default=full_path_default)
 
 
 @auth.route('/login',  methods=['GET', 'POST'])
@@ -35,34 +82,12 @@ def login():
 
             return redirect(next_page) if next_page else redirect(url_for('index_view'))
         else:
-            flash('Не удалось войти, проверьте почту или пароль', 'danger')
+            if not user:
+                flash('Login failed, please check your email address ', 'danger')
+            else:
+                flash('Login failed, please check your password', 'danger')
 
-    return render_template('login.html', form=form)
-
-
-@auth.route('/signup')
-def signup():
-    return render_template('signup.html')
-
-
-@auth.route('/signup', methods=['POST'])
-def signup_post():
-    username = request.form.get('username')
-    email = request.form.get('email')
-    password = request.form.get('password')
-
-    user = User.query.filter_by(email=email).first()
-
-    if user:
-        flash('Email address already exists')
-        return redirect(url_for('auth.signup'))
-
-    new_user = User(email=email, username=username, password=generate_password_hash(password, method='sha256'))
-
-    db.session.add(new_user)
-    db.session.commit()
-
-    return redirect(url_for('auth.login'))
+    return render_template('login.html', form=form, full_path_default=full_path_default)
 
 
 @auth.route('/logout')

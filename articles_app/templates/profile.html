@@ -49,7 +49,75 @@
       <div class="col-12 col-lg-3 text-center">
         <p class="mx-5"><a class="nav-link" href="{{ url_for('auth.profile', username=user.username) }}">Профиль {{ user.username }}</a></p>
         <p>Количество статей пользователя: {{ count }} <a class="mx-1 px-1" href="">Показать</a></p>
-        <img class="img-fluid d-block" src="{{ url_for('static', filename='img/illustration.png') }}" alt="" />
+        {% if user.image_file != 'default.jpg' %}
+          <img class="avatar"
+          {{ url_for('static', filename='jquery.js') }}
+              src="{{ url_for('static', filename='profile_pics/' + user_id + '/' + user.image_file) }}" alt="Avatar" />
+          {% else %}
+          <img class="avatar"
+              src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="Avatar" />
+        {% endif %}
+
+
+        {% if user == current_user %}
+        <p class="py-2 d-flex flex-row justify-content-center">
+          <a class="nav-link" href="">Обновить аккаунт</a></p>
+
+        <form id="content" enctype="multipart/form-data" method="POST" novalidate>
+          {{ form.csrf_token }}
+            <div class="form-group">
+              {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                  <div class=""><p class="py-3 mb-3 text-danger">
+                    {{ messages[0] }}</p>
+                  </div>
+                {% endif %}
+              {% endwith %}
+
+              {% if form.username.errors %}
+              {{ form.username(class='form-control is-invalid', placeholder="username") }}
+            <div class="invalid-feedback">
+              {% for errors in form.username.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+              </div>
+              {% else %}
+              <label for="exampleDropdownFormPassword">Username</label>
+                  {{form.username(class='form-control', placeholder="username") }}
+              {% endif %}
+
+              {% if form.email.errors %}
+              {{ form.email(class='form-control is-invalid', placeholder="Email") }}
+            <div class="invalid-feedback">
+              {% for errors in form.email.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+              </div>
+              {% else %}
+              <label for="exampleDropdownFormEmail">Email address</label>
+                  {{form.email(class='form-control', placeholder="email") }}
+              {% endif %}
+
+
+            {% if form.image_file.errors %}
+              {{ form.image_file(class='form-control is-invalid', placeholder="image_file") }}
+            <div class="invalid-feedback">
+              {% for errors in form.image_file.errors %}
+              <span>{{ error }}</span>
+              {% endfor %}
+              </div>
+              {% else %}
+              <label for="exampleDropdownFormPassword">Image file</label>
+                  {{form.image_file(class='form-control', placeholder="image_file") }}
+              {% endif %}
+
+          </div>
+          <a class="" href="">
+              <div class="my-1 form-group">{{ form.submit(class='btn btn-primary')}}</div>
+          </a>
+      </form>
+
+      {% endif %}
       </div>
     </div>
   </section>

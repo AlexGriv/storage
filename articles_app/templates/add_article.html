@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %} Добавить мнение о фильме {% endblock %}
+{% block title %} Добавить статью {% endblock %}
 {% block content %}
 <main>
   <section class="container my-5">
     <div class="row">
-      <h1>Добавить статью</h1>
       <div class="col-12 col-lg-9">
+        <h2>Добавить статью</h2>
         <div class="ArticleForm">
         <form method="POST" novalidate>
           {{ form.csrf_token }}

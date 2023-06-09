@@ -1,15 +1,18 @@
+import os
 from flask import Flask
+
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from settings import Config
 from flask_ckeditor import CKEditor
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ckeditor = CKEditor(app)
+
 
 from . import cli_commands, error_handlers, views
 from .auth import auth as auth_blueprint

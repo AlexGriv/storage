@@ -6,40 +6,55 @@
     <div class="row">
         <h1 class="title">Login</h1>
         <div class="col-12 col-lg-7">
-            <form method="POST" novalidate>
-                {{ form.csrf_token }}
-                <div class="row">
-                <div class="form-group col-12 col-lg-6">
-                    {% if form.email.errors %}
-                    {{ form.email(class='form-control form-control-sm py-3 mb-1 is-invalid', placeholder="Email") }}
-                  <div class="invalid-feedback">
-                    {% for errors in form.email.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
+          <form class="px-4 py-3" method="POST" novalidate>
+            {{ form.csrf_token }}
+              <div class="form-group">
+                {% with messages = get_flashed_messages() %}
+                  {% if messages %}
+                    <div class=""><p class="py-3 mb-3 text-danger">
+                      {{ messages[0] }}</p>
                     </div>
-                    {% else %}
-                        {{form.email(class='form-control form-control-sm py-3 mb-1', placeholder="Email") }}
-                    {% endif %}
+                  {% endif %}
+                {% endwith %}
+
+                {% if form.email.errors %}
+                {{ form.email(class='form-control is-invalid', placeholder="Email") }}
+              <div class="invalid-feedback">
+                {% for errors in form.email.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+                </div>
+                {% else %}
+                <label for="exampleDropdownFormEmail">Email address</label>
+                    {{form.email(class='form-control', placeholder="email") }}
+                {% endif %}
 
 
-                  {% if form.password.errors %}
-                    {{ form.password(class='form-control form-control-sm py-3 mb-1 is-invalid', placeholder="password") }}
-                  <div class="invalid-feedback">
-                    {% for errors in form.password.errors %}
-                    <span>{{ error }}</span>
-                    {% endfor %}
-                    </div>
-                    {% else %}
-                        {{form.password(class='form-control form-control-sm py-3 mb-1', placeholder="password") }}
-                    {% endif %}
+              {% if form.password.errors %}
+                {{ form.password(class='form-control is-invalid', placeholder="password") }}
+              <div class="invalid-feedback">
+                {% for errors in form.password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
                 </div>
-                <div class="form-check">
-                {{ form.remember(class='form-check-input')}}
-                {{ form.remember.label(class='form-check-label')}}
-                </div>
-                <div class="form-group">{{ form.submit(class='btn btn-primary')}}</div>
+                {% else %}
+                <label for="exampleDropdownFormPassword">Password</label>
+                    {{form.password(class='form-control', placeholder="password") }}
+                {% endif %}
+
             </div>
-            </form>
+
+            <div class="form-check">
+            {{ form.remember(class='form-check-input')}}
+            {{ form.remember.label(class='form-check-label')}}
+            </div>
+            <a class="" href="">
+                <div class="my-1 form-group">{{ form.submit(class='btn btn-primary')}}</div>
+            </a>
+            <a class="my-1 nav-link" href="{{ url_for('auth.signup') }}">New around here? Sign up</a>
+            <a class="my-1 nav-link" href="#">Forgot password?</a>
+        </form>
+
 
         </div>
     <div class="col-12 col-lg-5">

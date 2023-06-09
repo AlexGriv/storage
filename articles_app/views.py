@@ -1,4 +1,4 @@
-import datetime
+import datetime, os
 from flask import abort, flash, redirect, request, render_template, url_for, session
 from flask_login import login_required, current_user, login_user, AnonymousUserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -6,7 +6,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from . import app, db
 from .forms import ArticleForm, ArticleFormUpdate, LoginForm
 from .models import Article, User
-
 
 
 
@@ -25,15 +24,20 @@ def index_view():
 
             return redirect(next_page) if next_page else redirect(url_for('index_view'))
         else:
-            flash('Не удалось войти, проверьте почту или пароль', 'danger')
-
+            if not user:
+                flash('Login failed, please check your email address ', 'danger')
+            else:
+                flash('Login failed, please check your password', 'danger')
+    if current_user.is_authenticated:
+        user_id = str(current_user.id)
+        return render_template('articles.html', user_id=user_id, article=article, user=current_user, form=form)
     return render_template('articles.html', article=article, user=current_user, form=form)
+
 
 
 @app.route('/add', methods=['GET', 'POST'])
 @login_required
 def add_article_view():
-    user = current_user
     form = ArticleForm()
     if form.validate_on_submit():
         text = form.text.data
@@ -51,13 +55,15 @@ def add_article_view():
         db.session.commit()
         next_page = request.args.get('next')
         return redirect(next_page) if next_page else redirect(url_for('index_view'))
-    return render_template('add_article.html', form=form, user=user)
+    user_id = str(current_user.id)
+    return render_template('add_article.html', user_id=user_id, form=form, user=current_user)
 
 
 @app.route('/articles/<int:id>/update', methods=['GET', 'POST'])
 @login_required
-def article_update(id):
+def article_update(id, user=current_user):
     article = Article.query.get_or_404(id)
+    user_id = str(current_user.id)
     if article.author != current_user:
         return redirect(url_for('article_view', id=id))
     form = ArticleFormUpdate()
@@ -78,13 +84,13 @@ def article_update(id):
             return "При редактировании произошла ошибка"
 
     else:
-        return render_template('article_update.html', article=article, form=form)
+        return render_template('article_update.html', user_id=user_id, user=current_user, article=article, form=form)
 
 
 @app.route('/articles/<int:id>')
 def article_view(id):
     article = Article.query.get_or_404(id)
-    return render_template('article.html', article=article)
+    return render_template('article.html', user=current_user, article=article)
 
 
 @app.route('/articles/<int:id>/delete')
@@ -101,15 +107,3 @@ def article_delete(id):
             return redirect('/')
         except:
             return "При удалении произошла ошибка"
-
-
-# @app.route('/random')
-#def random():
-#    quantity = Article.query.count()
-#    if not quantity:
-#        abort(404)
-#    offset_value = randrange(quantity)
-#    article = Article.query.offset(offset_value).first()
-#    if not article:
-#        abort(404)
-#    return render_template('article.html', article=article)

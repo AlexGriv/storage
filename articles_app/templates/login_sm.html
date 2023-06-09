@@ -3,31 +3,41 @@
             <form class="px-4 py-3" method="POST" novalidate>
                 {{ form.csrf_token }}
                   <div class="form-group">
+                    {% with messages = get_flashed_messages() %}
+                      {% if messages %}
+                        <div class=""><p class="py-3 mb-3 text-danger">
+                          {{ messages[0] }}</p>
+                        </div>
+                      {% endif %}
+                    {% endwith %}
+
                     {% if form.email.errors %}
-                    {{ form.email(class='is-invalid', placeholder="Email") }}
+                    {{ form.email(class='form-control is-invalid', placeholder="Email") }}
                   <div class="invalid-feedback">
                     {% for errors in form.email.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                     </div>
                     {% else %}
-                    <label for="exampleDropdownFormEmail1">Email address</label>
+                    <label for="exampleDropdownFormEmail">Email address</label>
                         {{form.email(class='form-control', placeholder="email") }}
                     {% endif %}
 
 
                   {% if form.password.errors %}
-                    {{ form.password(class='is-invalid', placeholder="password") }}
+                    {{ form.password(class='form-control is-invalid', placeholder="password") }}
                   <div class="invalid-feedback">
                     {% for errors in form.password.errors %}
                     <span>{{ error }}</span>
                     {% endfor %}
                     </div>
                     {% else %}
-                    <label for="exampleDropdownFormPassword1">Password</label>
+                    <label for="exampleDropdownFormPassword">Password</label>
                         {{form.password(class='form-control', placeholder="password") }}
                     {% endif %}
+
                 </div>
+
                 <div class="form-check">
                 {{ form.remember(class='form-check-input')}}
                 {{ form.remember.label(class='form-check-label')}}
