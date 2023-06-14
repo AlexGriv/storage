@@ -2,12 +2,12 @@ import os
 
 from flask import Blueprint, flash, render_template, redirect, url_for, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
-from .models import Article, User
+from ..models import Article, User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db, login_manager
-from .forms import LoginForm, SignupForm, AccountUpdateForm
-from .utils import picture_path
-from .models import User
+from .. import db, login_manager
+from ..forms import LoginForm, SignupForm, AccountUpdateForm
+from ..utils import picture_path
+from ..models import User
 
 @login_manager.user_loader
 def load_user(user_id):

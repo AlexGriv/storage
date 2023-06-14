@@ -20,6 +20,6 @@ login_manager.init_app(app)
 
 
 from . import views, error_handlers
-from .auth import auth
+from .user.auth import auth
 
 app.register_blueprint(auth)
