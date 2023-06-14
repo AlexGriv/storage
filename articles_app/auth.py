@@ -4,14 +4,18 @@ from flask import Blueprint, flash, render_template, redirect, url_for, request,
 from flask_login import current_user, login_user, logout_user, login_required
 from .models import Article, User
 from werkzeug.security import generate_password_hash, check_password_hash
-from . import db
+from . import db, login_manager
 from .forms import LoginForm, SignupForm, AccountUpdateForm
 from .utils import picture_path
+from .models import User
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 auth = Blueprint('auth', __name__)
-full_path_default = 'static/'+ 'profile_pics'
+
 
 
 @auth.route('/user/<username>', methods=['GET', 'POST'])
@@ -71,7 +75,7 @@ def signup():
         flash('Your account has been created', 'success')
         return redirect(url_for('index_view'))
 
-    return render_template('signup.html', form=form, full_path_default=full_path_default)
+    return render_template('signup.html', form=form)
 
 
 @auth.route('/login',  methods=['GET', 'POST'])
@@ -90,7 +94,7 @@ def login():
             else:
                 flash('Login failed, please check your password', 'danger')
 
-    return render_template('login.html', form=form, full_path_default=full_path_default)
+    return render_template('login.html', form=form)
 
 
 @auth.route('/logout')
