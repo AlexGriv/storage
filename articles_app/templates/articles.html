@@ -9,9 +9,18 @@
         <!-- All article view block-->
           {% for items in article.items %}
           <h2 >{{ items.title }}</h2>
-          <div class="d-flex p-2 bd-highlight p-3 border-0">
-            <a class="nav-link mx-1 px-1" href="/user/{{items.author.username}}">{{ items.author.username }}</a>
-            {{ items.timestamp.strftime('%d.%h.%Y.%H:%M') }}</div>
+          <div class="d-flex align-items-centerbd-highlight p-3 border-0">
+            <a class="nav-link mx-1 px-1" href="/user/{{items.author.username}}">
+            {% if user.image_file != 'default.jpg' %}
+            <img class="avatar_small"
+            {{ url_for('static', filename='jquery.js') }}
+                src="{{ url_for('static', filename='profile_pics/' + items.author.id|string + '/' + items.author.image_file) }}" alt="Avatar" />
+            {% else %}
+            <img class="avatar"
+                src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="Avatar" />
+            {% endif %}
+            {{ items.author.username }}</a>
+            <a class="nav-link mx-1 px-1 py-3" href="/articles/{{items.id}}">{{ items.timestamp.strftime('%d.%h.%Y.%H:%M') }} {{ items.prog_lang }}</a></div>
             <div class="text-block px-2 py-2">{{ items.text|safe }}</div>
             {% if items.author == current_user %}
             <div class="d-flex justify-content-left px-2 py-2">

@@ -13,17 +13,12 @@ def picture_path(picture):
         os.mkdir(full_path)
     picture_pa = os.path.join(full_path, picture_filename)
     size = (200, 200)
+    dir = full_path
+    for file in os.scandir(dir):
+        if file != picture_filename:
+            os.remove(file.path)
     i = Image.open(picture)
     i.thumbnail(size)
     i.save(picture_pa)
     return picture_filename
-
-
-def size_avatar(picture):
-    size=(200,200)
-    im = Image.open(picture)
-    out = im.resize(size)
-    out.save(picture)
-    return picture
-
 

@@ -9,12 +9,13 @@ from flask_ckeditor import CKEditor
 
 app = Flask(__name__, static_folder="static")
 app.config.from_object(Config)
+# app.secret_key = os.urandom(36)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ckeditor = CKEditor(app)
 
 
-from . import cli_commands, error_handlers, views
+from . import views, error_handlers
 from .auth import auth as auth_blueprint
 app.register_blueprint(auth_blueprint)
 

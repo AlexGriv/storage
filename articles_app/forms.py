@@ -20,9 +20,9 @@ class ArticleForm(FlaskForm):
         validators=[Length(1, 300), Optional()]
     )
     text = CKEditorField('Напишите подробно', validators=[DataRequired(message='Обязательное поле')])
-    #text = TextAreaField('Напишите подробно',validators=[DataRequired(message='Обязательное поле')])
+    # text = TextAreaField('Напишите подробно',validators=[DataRequired(message='Обязательное поле')])
     prog_lang = StringField(
-        'Добавьте язык програмирования',
+        'Добавьте язык программирования',
         validators=[DataRequired(message='Обязательное поле'), Length(1, 64)]
     )
     submit = SubmitField('Добавить')

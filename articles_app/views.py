@@ -13,6 +13,7 @@ from .models import Article, User
 def index_view():
     page = request.args.get('page', 1, type=int)
     article = Article.query.order_by(Article.timestamp.desc()).paginate(page=page, per_page=5)
+
     # article = Article.query.order_by(Article.timestamp.desc()).all()
     # return render_template('articles.html', article=article, user=user, form=form)
     form = LoginForm()
@@ -28,6 +29,7 @@ def index_view():
                 flash('Login failed, please check your email address ', 'danger')
             else:
                 flash('Login failed, please check your password', 'danger')
+
     if current_user.is_authenticated:
         user_id = str(current_user.id)
         return render_template('articles.html', user_id=user_id, article=article, user=current_user, form=form)

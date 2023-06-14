@@ -1,6 +1,6 @@
 import os
 
-from flask import Blueprint, flash, render_template, redirect, url_for, request
+from flask import Blueprint, flash, render_template, redirect, url_for, request, current_app
 from flask_login import current_user, login_user, logout_user, login_required
 from .models import Article, User
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -40,7 +40,10 @@ def profile(username, page=1):
 
             db.session.commit()
             flash('Your account has been updated', 'Success')
+
+
             return redirect(url_for('auth.profile', username=current_user.username))
+
     user_id = str(user.id)
 
     return render_template('profile.html', form=form, user_id=user_id, user=user, article=article, count=count, page=page)

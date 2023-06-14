@@ -16,13 +16,22 @@
               {% endif %}
             {% endwith %}
               </div>
-        <h2 class="d-flex flex-row justify-content-center">{{ article.title }}</h2>
-        <div class="d-flex flex-row justify-content-center">
-          <div class="p-2""><a class="nav-link mx-1 px-1" href="{{ url_for('auth.profile', username=article.author.username) }}">{{ article.author.username }}</a></div>
-          <div class="p-2">{{ article.timestamp.strftime('%d.%h.%Y.%H:%M') }}</div>
-          <div class="p-2">{{ article.prog_lang }}</div>
+        <h2 class="d-flex flex-row justify-content-left">{{ article.title }}</h2>
+        <div class="d-flex flex-row justify-content-left align-items-centerbd-highlight">
+          <div class="d-flex align-items-centerbd-highlight p-3 border-0">
+            <a class="nav-link mx-1 px-1" href="/user/{{article.author.username}}">
+            {% if user.image_file != 'default.jpg' %}
+            <img class="avatar_small"
+            {{ url_for('static', filename='jquery.js') }}
+                src="{{ url_for('static', filename='profile_pics/' + article.author.id|string + '/' + article.author.image_file) }}" alt="Avatar" />
+            {% else %}
+            <img class="avatar"
+                src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="Avatar" />
+            {% endif %}
+            {{ article.author.username }}</a>
+            <a class="nav-link mx-1 px-1 py-3" href="#">{{ article.timestamp.strftime('%d.%h.%Y.%H:%M') }} {{ article.prog_lang }}</a></div>
         </div>
-          <p></p>
+
           <div class="text-block px-2 py-2">{{ article.text|safe }}</div>
 
 
@@ -43,7 +52,7 @@
           </div>
         </div>
           <div class="col-12 col-lg-3 my-3 text-center">
-         
+
           </div>
     </div>
   </section>
