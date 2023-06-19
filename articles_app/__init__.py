@@ -6,6 +6,8 @@ from flask_sqlalchemy import SQLAlchemy
 from settings import Config
 from flask_ckeditor import CKEditor
 from flask_login import LoginManager
+from flask_mail import Mail
+
 
 app = Flask(__name__, static_folder="static")
 app.config.from_object(Config)
@@ -16,6 +18,8 @@ ckeditor = CKEditor(app)
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'
 login_manager.init_app(app)
+mail = Mail()
+mail.init_app(app)
 
 
 

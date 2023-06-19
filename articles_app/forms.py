@@ -78,3 +78,20 @@ class AccountUpdateForm(FlaskForm):
             if user:
                 flash('This email is already taken, please use another one.', 'danger')
                 raise ValidationError('This email is already taken, please use another one.')
+
+
+class ResetForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    submit = SubmitField('Reset password')
+
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if user is None:
+            flash('Email not found, please try another.', 'danger')
+            raise ValidationError('Email not found, please try another.')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm_password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Reset password')

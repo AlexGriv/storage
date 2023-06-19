@@ -20,12 +20,12 @@
         <div class="d-flex flex-row justify-content-left align-items-centerbd-highlight">
           <div class="d-flex align-items-centerbd-highlight p-3 border-0">
             <a class="nav-link mx-1 px-1" href="/user/{{article.author.username}}">
-            {% if user.image_file != 'default.jpg' %}
+            {% if article.author.image_file != 'default.jpg' %}
             <img class="avatar_small"
             {{ url_for('static', filename='jquery.js') }}
                 src="{{ url_for('static', filename='profile_pics/' + article.author.id|string + '/' + article.author.image_file) }}" alt="Avatar" />
             {% else %}
-            <img class="avatar"
+            <img class="avatar_small"
                 src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="Avatar" />
             {% endif %}
             {{ article.author.username }}</a>

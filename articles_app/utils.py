@@ -1,7 +1,10 @@
 import secrets, os
 from PIL import Image
-from flask import current_app
+from flask import current_app, url_for
 from flask_login import current_user
+from flask_mail import Message
+from articles_app import mail
+from .models import User
 
 
 def picture_path(picture):
@@ -22,3 +25,14 @@ def picture_path(picture):
     i.save(picture_pa)
     return picture_filename
 
+def send_reset_email(user):
+    token = user.get_reset_token()
+    message = Message('Password change request', sender='noreply@demo.com', recipients=[user.email])
+    message.body = f"""
+    To reset your password, follow this link:
+    {url_for('user.reset_token', token=token, _external=True)}
+
+    If you didn't make this request just ignore this request, no changes will be made.
+    You do not need to reply to the email, it is generated automatically.
+    """
+    mail.send(message)

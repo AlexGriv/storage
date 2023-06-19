@@ -1,12 +1,12 @@
 import os
 
-from flask import Blueprint, flash, render_template, redirect, url_for, request, current_app
+from flask import Blueprint, flash, render_template, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from ..models import Article, User
 from werkzeug.security import generate_password_hash, check_password_hash
 from .. import db, login_manager
-from ..forms import LoginForm, SignupForm, AccountUpdateForm
-from ..utils import picture_path
+from ..forms import LoginForm, SignupForm, AccountUpdateForm, ResetForm, ResetPasswordForm
+from ..utils import picture_path, send_reset_email
 from ..models import User
 
 @login_manager.user_loader
@@ -59,11 +59,10 @@ def signup():
         return redirect (url_for('index_view'))
     form = SignupForm()
     if form.validate_on_submit():
-        hashed_password = generate_password_hash(form.password.data)
         user = User(
             username=form.username.data,
             email=form.email.data,
-            password=hashed_password,
+            password=generate_password_hash(form.password.data),
         )
         db.session.add(user)
         db.session.commit()
@@ -102,3 +101,34 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index_view'))
+
+
+@auth.route('/reset_password', methods=['GET', 'POST'])
+def reset_password():
+    if current_user.is_authenticated:
+        return redirect (url_for('index_view'))
+    form = ResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data)
+        send_reset_email(user)
+        flash('Password recovery instructions have been sent to the email address provided.')
+        return redirect(url_for('auth.login'))
+    return render_template('reset_password.html', form=form)
+
+
+
+@auth.route('/reset_password/<token>', methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect (url_for('index_view'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('Invalid and expired token', 'warning')
+        return redirect(url_for('auth.reset_password'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.password = generate_password_hash(form.password.data)
+        db.session.commit()
+        flash('Your password has been updated', 'Success')
+        return redirect(url_for('auth.login'))
+    return render_template('reset_token.html', form=form)

@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-{% block title %} Login {%endblock %}
+{% block title %} Reset token {%endblock %}
 {% block content %}
 <main>
   <section class="container my-5">
     <div class="row">
-        <h1 class="title">Login</h1>
+        <h1 class="title">Reset token </h1>
         <div class="col-12 col-lg-7">
           <form class="px-4 py-3" method="POST" novalidate>
             {{ form.csrf_token }}
@@ -17,20 +17,7 @@
                   {% endif %}
                 {% endwith %}
 
-                {% if form.email.errors %}
-                {{ form.email(class='form-control is-invalid', placeholder="Email") }}
-              <div class="invalid-feedback">
-                {% for errors in form.email.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-                </div>
-                {% else %}
-                <label for="exampleDropdownFormEmail">Email address</label>
-                    {{form.email(class='form-control', placeholder="email") }}
-                {% endif %}
-
-
-              {% if form.password.errors %}
+                {% if form.password.errors %}
                 {{ form.password(class='form-control is-invalid', placeholder="password") }}
               <div class="invalid-feedback">
                 {% for errors in form.password.errors %}
@@ -38,21 +25,28 @@
                 {% endfor %}
                 </div>
                 {% else %}
-                <label for="exampleDropdownFormPassword">Password</label>
+                <label for="exampleDropdownFormPassword1">Password</label>
                     {{form.password(class='form-control', placeholder="password") }}
+                {% endif %}
+
+                {% if form.confirm_password.errors %}
+                {{ form.confirm_password(class='form-control is-invalid', placeholder="confirm_password") }}
+                <div class="invalid-feedback">
+                {% for errors in form.confirm_password.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+                </div>
+                {% else %}
+                <label for="exampleDropdownFormPassword1">Confirm password</label>
+                {{form.confirm_password(class='form-control', placeholder="confirm_password") }}
                 {% endif %}
 
             </div>
 
-            <div class="form-check">
-            {{ form.remember(class='form-check-input')}}
-            {{ form.remember.label(class='form-check-label')}}
-            </div>
             <a class="" href="">
                 <div class="my-1 form-group">{{ form.submit(class='btn btn-primary')}}</div>
             </a>
-            <a class="my-1 nav-link" href="{{ url_for('auth.signup') }}">New around here? Sign up</a>
-            <a class="my-1 nav-link" href="{{ url_for('auth.reset_password') }}">Forgot password?</a>
+
         </form>
 
 
