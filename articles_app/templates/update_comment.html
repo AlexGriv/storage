@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %} Обновить коммент {% endblock %}
+{% block content %}
+<main>
+  <section class="container my-5">
+    <div class="row">
+      <div class="col-12 col-lg-9">
+        <h2>Обновить коммент</h2>
+        <div class="UpdateComment">
+            <div class="d-flex justify-content-left px-1 py-1">
+                <form method="POST" novalidate>
+                  {{ form.csrf_token }}
+                  {{ form.body(class="form-control form-control-lg py-3 mb-3", placeholder=comment.body)}}
+
+                  <p>
+                    {% if form.body.errors %}
+                      {% for error in form.body.errors %}
+                        <span style="color: red">{{ error }}</span>
+                      {% endfor %}
+                    {% endif %}
+                  </p>
+                  {{ form.submit(class="buttondetail px-1 py-1 btn") }}
+                </form>
+                {{ ckeditor.load(pkg_type="standart") }}
+                {{ ckeditor.config(name='text') }}
+              </div>
+            </div>
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

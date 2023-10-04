@@ -51,7 +51,7 @@
         <p>Количество статей пользователя: {{ count }} <a class="mx-1 px-1" href="">Показать</a></p>
         {% if user.image_file != 'default.jpg' %}
           <img class="avatar"
-          {{ url_for('static', filename='jquery.js') }}
+          
               src="{{ url_for('static', filename='profile_pics/' + user_id + '/' + user.image_file) }}" alt="Avatar" />
           {% else %}
           <img class="avatar"

@@ -8,7 +8,6 @@ from flask_ckeditor import CKEditorField
 from .models import User
 
 
-
 class ArticleForm(FlaskForm):
     title = StringField(
         'Введите название',
@@ -29,6 +28,15 @@ class ArticleForm(FlaskForm):
 
 
 class ArticleFormUpdate(ArticleForm):
+    submit = SubmitField('Редактировать')
+
+
+class AddComment(FlaskForm):
+    body = CKEditorField('Напишите комментарий', validators=[DataRequired(message='Обязательное поле')])
+    submit = SubmitField('Добавить')
+
+
+class UpdateComment(AddComment):
     submit = SubmitField('Редактировать')
 
 

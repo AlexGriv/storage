@@ -1,7 +1,6 @@
 <p class="mx-5 text-center"><a class="nav-link active" href="{{ url_for('auth.profile', username=user.username) }}">Профиль {{ user.username }}</a></p>
 {% if user.image_file != 'default.jpg' %}
 <img class="avatar"
-{{ url_for('static', filename='jquery.js') }}
     src="{{ url_for('static', filename='profile_pics/' + user_id + '/' + user.image_file) }}" alt="Avatar" />
 {% else %}
 <img class="avatar"

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %} Все статьи {% endblock %}
+{% block content %}
+<main>
+  <section class="container my-5">
+    <div class="row">
+      <div class="col-12 col-lg-9">
+
+        <!-- All article view block-->
+          {% for search in search_article %}
+          <h2 >{{ search.title }}</h2>
+          <div class="d-flex align-items-centerbd-highlight p-3 border-0">
+            <a class="nav-link mx-1 px-1" href="/user/{{search.author.username}}">
+            {% if search.author.image_file != 'default.jpg' %}
+            <img class="avatar_small"
+
+                src="{{ url_for('static', filename='profile_pics/' + search.author.id|string + '/' + search.author.image_file) }}" alt="Avatar" />
+            {% else %}
+            <img class="avatar_small"
+                src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="Avatar" />
+            {% endif %}
+            {{ search.author.username }}</a>
+            <a class="nav-link mx-1 px-1 py-3" href="/articles/{{search.id}}">{{ search.timestamp.strftime('%d.%h.%Y.%H:%M') }} {{ search.prog_lang }}</a></div>
+            <div class="text-block">{{ search.text|safe|truncate }}</div>
+            {% endfor %}
+        <!-- All article view end-->
+
+      </div>
+
+      <!-- accaunt info block-->
+      <div class="col-12 col-lg-3 my-3 text-center">
+        {% if current_user.is_authenticated %}
+          {% include "profile_sm.html" %}
+        {% else %}
+          {% include "login_sm.html" %}
+        {% endif %}
+
+      </div>
+      <!-- account info end-->
+
+
+  </section>
+</main>
+{% endblock %}

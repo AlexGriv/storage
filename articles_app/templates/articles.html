@@ -8,12 +8,12 @@
 
         <!-- All article view block-->
           {% for items in article.items %}
-          <h2 >{{ items.title }}</h2>
+          <h3>{{ items.title }}</h3>
           <div class="d-flex align-items-centerbd-highlight p-3 border-0">
             <a class="nav-link mx-1 px-1" href="/user/{{items.author.username}}">
             {% if items.author.image_file != 'default.jpg' %}
             <img class="avatar_small"
-            {{ url_for('static', filename='jquery.js') }}
+
                 src="{{ url_for('static', filename='profile_pics/' + items.author.id|string + '/' + items.author.image_file) }}" alt="Avatar" />
             {% else %}
             <img class="avatar_small"

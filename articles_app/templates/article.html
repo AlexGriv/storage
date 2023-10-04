@@ -22,7 +22,6 @@
             <a class="nav-link mx-1 px-1" href="/user/{{article.author.username}}">
             {% if article.author.image_file != 'default.jpg' %}
             <img class="avatar_small"
-            {{ url_for('static', filename='jquery.js') }}
                 src="{{ url_for('static', filename='profile_pics/' + article.author.id|string + '/' + article.author.image_file) }}" alt="Avatar" />
             {% else %}
             <img class="avatar_small"
@@ -48,9 +47,68 @@
                 <a href="/articles/{{article.id}}/update"><button class="buttondetail px-3 py-2 btn">Редактировать</button>
                   </a>
                   {% endif %}
-            </li>
+            </li></ul>
+            </div>
+
+            {% if current_user.is_authenticated %}
+          <div class="d-flex justify-content-left px-1 py-1">
+            <form method="POST" novalidate>
+              {{ form.csrf_token }}
+              {{ form.body(class="form-control form-control-lg py-3 mb-3")}}
+
+              <p>
+                {% if form.body.errors %}
+                  {% for error in form.body.errors %}
+                    <span style="color: red">{{ error }}</span>
+                  {% endfor %}
+                {% endif %}
+              </p>
+              {{ form.submit(class="buttondetail px-1 py-1 btn") }}
+            </form>
+            {{ ckeditor.load(pkg_type="standart") }}
+            {{ ckeditor.config(name='text') }}
           </div>
+          {% endif %}
+
         </div>
+
+
+
+         {% for i in comment %}
+         <div class="d-flex justify-content-left py-1"></div>
+         <div class="single_comment">
+
+          <div class="head_comment">
+            <div class="left_comment_side">
+              <a href="/user/{{i.username}}">
+                  {% if i.comment_author.image_file != 'default.jpg' %}
+                  <img class="avatar_small"
+      
+                      src="{{ url_for('static', filename='profile_pics/' + i.comment_author.id|string + '/' + i.comment_author.image_file) }}" alt="Avatar" />
+                  {% else %}
+                  <img class="avatar_small"
+                      src="{{ url_for('static', filename='profile_pics/default.jpg') }}" alt="Avatar" />
+                  {% endif %}
+                {{i.username}}</a>
+            </div>
+
+            <div class="right_comment_side">{{ i.timestamp.strftime('%d.%m.%Y-%H:%M') }}
+            </div>
+          </div>
+
+            <div class="body_comment">
+              {{ i.body|safe }}
+            </div>
+
+        {% if i.username == current_user.username %}
+        <a class="commet-link pe-1 px-5" href="{{ url_for('comment_update', comment_id=i.id) }}">Обновить комментарий</a>
+        <a class="commet-link pe-1 px-5" href="{{ url_for('comment_delete', comment_id=i.id) }}">Удалить комментарий</a>
+        {% endif %}
+        {% endfor%}
+        </div>
+        </div>
+
+
           <div class="col-12 col-lg-3 my-3 text-center">
 
           </div>
