@@ -119,7 +119,6 @@ def article_delete(id):
             return "При удалении произошла ошибка"
 
 
-
 @app.route('/comment/<int:comment_id>/delete')
 @login_required
 def comment_delete(comment_id):
@@ -144,7 +143,7 @@ def comment_update(comment_id):
     if request.method == 'GET':
         form.body.data = comment.body
 
-    if form.validate_on_submit():
+    if form.validate_on_submit() and comment.comment_author.id == current_user.id:
         comment.body = form.body.data
         db.session.commit()
         return redirect(url_for('article_view', id=comment.article_id))
@@ -155,6 +154,6 @@ def comment_update(comment_id):
 @login_required
 def search():
     user_id = str(current_user.id)
-    keyword = request.args.get('q')
-    search_article = Article.query.msearch(keyword, fields=['title', 'text'], limit=10)
+    keyword = request.args.get('keyword')
+    search_article = Article.query.msearch(keyword, fields=['title', 'text'], limit=6)
     return render_template('search.html', user=current_user, search_article=search_article, user_id=user_id)

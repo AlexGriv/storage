@@ -83,7 +83,6 @@
               <a href="/user/{{i.username}}">
                   {% if i.comment_author.image_file != 'default.jpg' %}
                   <img class="avatar_small"
-      
                       src="{{ url_for('static', filename='profile_pics/' + i.comment_author.id|string + '/' + i.comment_author.image_file) }}" alt="Avatar" />
                   {% else %}
                   <img class="avatar_small"
@@ -100,7 +99,7 @@
               {{ i.body|safe }}
             </div>
 
-        {% if i.username == current_user.username %}
+        {% if i.user_id == current_user.id %}
         <a class="commet-link pe-1 px-5" href="{{ url_for('comment_update', comment_id=i.id) }}">Обновить комментарий</a>
         <a class="commet-link pe-1 px-5" href="{{ url_for('comment_delete', comment_id=i.id) }}">Удалить комментарий</a>
         {% endif %}
