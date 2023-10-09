@@ -9,6 +9,12 @@
                 <a class="flex-sm-fill text-sm-center nav-link" href="{{ url_for('index_view') }}">Главная</a>
             </li>
               {% if current_user.is_authenticated %}
+              {% if current_user.is_admin %}
+              <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('admin.index') }}">
+                  Admin panel
+                </a></li>
+                {% endif %}
                 <li class="nav-item">
               <a class="flex-sm-fill text-sm-center nav-link" href="{{ url_for('add_article_view') }}">
                 Добавить статью

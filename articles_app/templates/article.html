@@ -37,13 +37,13 @@
           <div class="d-flex justify-content-left px-2 py-2">
             <ul class="nav nav-pills">
               <li class="nav-item pe-3">
-                {% if article.author == current_user %}
+                {% if article.author == current_user or current_user.is_admin %}
                 <a href="/articles/{{article.id}}/delete"><button class="buttondetail px-3 py-2 btn">Удалить</button>
                   </a>
                   {% endif %}
                   </li>
                   <li class="nav-item pe-3">
-                  {% if article.author == current_user %}
+                  {% if article.author == current_user or current_user.is_admin %}
                 <a href="/articles/{{article.id}}/update"><button class="buttondetail px-3 py-2 btn">Редактировать</button>
                   </a>
                   {% endif %}
@@ -99,7 +99,7 @@
               {{ i.body|safe }}
             </div>
 
-        {% if i.user_id == current_user.id %}
+        {% if i.user_id == current_user.id or current_user.is_admin %}
         <a class="commet-link pe-1 px-5" href="{{ url_for('comment_update', comment_id=i.id) }}">Обновить комментарий</a>
         <a class="commet-link pe-1 px-5" href="{{ url_for('comment_delete', comment_id=i.id) }}">Удалить комментарий</a>
         {% endif %}

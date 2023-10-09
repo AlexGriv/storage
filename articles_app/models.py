@@ -14,6 +14,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(128))
     article = db.relationship('Article', backref='author', lazy='dynamic')
     comment = db.relationship('Comment', backref='comment_author', lazy='dynamic')
+    role = db.Column(db.String(20), index=True, default='user')
 
     def get_reset_token(self, expires_sec=1800):
         serializer = Serializer(current_app.config['SECRET_KEY'], expires_sec)
@@ -27,6 +28,10 @@ class User(UserMixin, db.Model):
         except:
             return None
         return User.query.get(user_id)
+
+    @property
+    def is_admin(self):
+        return self.role == 'admin'
 
     def __repr__(self):
         return f'User({self.username}, {self.email}, {self.image_file})'

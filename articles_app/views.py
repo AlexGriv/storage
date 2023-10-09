@@ -107,32 +107,32 @@ def article_view(id):
 @login_required
 def article_delete(id):
     article = Article.query.get_or_404(id)
-    if article.author != current_user:
-        flash('Нельзя удалять чужие статьи', 'danger')
-        return render_template('article.html', article=article)
-    else:
+    if article.author == current_user or current_user.is_admin:
         try:
             db.session.delete(article)
             db.session.commit()
             return redirect('/')
         except:
             return "При удалении произошла ошибка"
+    else:
+        flash('Нельзя удалять чужие статьи', 'danger')
+        return render_template('article.html', article=article)
 
 
 @app.route('/comment/<int:comment_id>/delete')
 @login_required
 def comment_delete(comment_id):
     comment = Comment.query.get_or_404(comment_id)
-    if comment.comment_author.id != current_user.id:
-        flash('Нельзя удалять чужие комментарии', 'danger')
-        return redirect(url_for('article_view', id=comment.article_id))
-    else:
+    if comment.comment_author.id == current_user.id or current_user.is_admin:
         try:
             db.session.delete(comment)
             db.session.commit()
             return redirect(url_for('article_view', id=comment.article_id))
         except:
             return "При удалении произошла ошибка"
+    else:
+        flash('Нельзя удалять чужие комментарии', 'danger')
+        return redirect(url_for('article_view', id=comment.article_id))
 
 
 @app.route('/comment/<int:comment_id>/update', methods=['GET', 'POST'])
