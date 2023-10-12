@@ -17,7 +17,7 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 ckeditor = CKEditor(app)
-mail = Mail()
+mail = Mail(app)
 search = Search()
 login_manager = LoginManager()
 login_manager.login_view = 'auth.login'

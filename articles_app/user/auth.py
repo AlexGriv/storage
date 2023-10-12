@@ -108,12 +108,11 @@ def reset_password():
         return redirect (url_for('index_view'))
     form = ResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data)
+        user = User.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
         flash('Password recovery instructions have been sent to the email address provided.')
         return redirect(url_for('auth.login'))
     return render_template('reset_password.html', form=form)
-
 
 
 @auth.route('/reset_password/<token>', methods=['GET', 'POST'])

@@ -1,4 +1,6 @@
 from datetime import datetime
+from time import time
+import jwt
 from flask_login import UserMixin
 from flask import current_app
 from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
@@ -16,18 +18,20 @@ class User(UserMixin, db.Model):
     comment = db.relationship('Comment', backref='comment_author', lazy='dynamic')
     role = db.Column(db.String(20), index=True, default='user')
 
-    def get_reset_token(self, expires_sec=1800):
-        serializer = Serializer(current_app.config['SECRET_KEY'], expires_sec)
-        return serializer.dumps({'user_id': self.id}).decode('utf-8')
+    def get_reset_token(self, expires_in=600):
+        return jwt.encode(
+            {'reset_password': self.id, 'exp': time() + expires_in},
+            current_app.config['SECRET_KEY'], algorithm='HS256')
+
 
     @staticmethod
     def verify_reset_token(token):
-        serializer = Serializer(current_app.config['SECRET_KEY'])
         try:
-            user_id = serializer.loads(token)['user_id']
+            id = jwt.decode(token, current_app.config['SECRET_KEY'],
+                            algorithms=['HS256'])['reset_password']
         except:
-            return None
-        return User.query.get(user_id)
+            return
+        return User.query.get(id)
 
     @property
     def is_admin(self):
