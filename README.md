@@ -29,8 +29,7 @@ flask db upgrade
 
 
 ### Пример
-```
-![Иллюстрация к проекту](https://github.com/AlexGriv/storage/raw/master/demo.png)
+![Иллюстрация к проекту](https://github.com/AlexGriv/storage/raw/main/demo.png)
 
 ## Автор
 AlexGriv https://github.com/AlexGriv
