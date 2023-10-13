@@ -24,12 +24,15 @@ flask db init
 flask db migrate -m "Initial migration."
 flask db upgrade
 ```
+Выполните по очереди команды:
+```
+flask run --debug
+```
 
 Создайте суперпользователя через DBeaver или аналог, роль admin
-
 
 ### Пример
 ![Иллюстрация к проекту](https://github.com/AlexGriv/storage/raw/main/demo.png)
 
-## Автор
+### Автор
 AlexGriv https://github.com/AlexGriv
