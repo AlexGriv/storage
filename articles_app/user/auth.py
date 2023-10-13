@@ -1,3 +1,4 @@
+from datetime import timedelta
 import os
 
 from flask import Blueprint, flash, render_template, redirect, url_for, request
@@ -82,9 +83,11 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
         if user and check_password_hash(user.password, form.password.data):
-            login_user(user, remember=form.remember.data)
-            next_page = request.args.get('next')
-
+            if form.remember == True:
+                login_user(user, remember=True, duration=timedelta(days=5))
+                next_page = request.args.get('next')
+            else:
+                login_user(user, remember=False)
             return redirect(next_page) if next_page else redirect(url_for('index_view'))
         else:
             if not user:
