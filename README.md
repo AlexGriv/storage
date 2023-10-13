@@ -28,5 +28,9 @@ flask db upgrade
 Создайте суперпользователя через DBeaver или аналог, роль admin
 
 
+### Пример
+```
+![Иллюстрация к проекту](https://github.com/AlexGriv/storage/raw/master/articles_app\static\img\demo.png)
+
 ## Автор
 AlexGriv https://github.com/AlexGriv
