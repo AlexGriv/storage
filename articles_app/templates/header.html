@@ -6,7 +6,7 @@
           <ul class="nav nav-pills flex-column flex-sm-row">
             <li class="nav-item">
               <li class="nav-item">
-                <a class="flex-sm-fill text-sm-center nav-link" href="{{ url_for('index_view') }}">Главная</a>
+                <a class="flex-sm-fill text-sm-center nav-link" href="{{ url_for('index_view') }}">Home</a>
             </li>
               {% if current_user.is_authenticated %}
               {% if current_user.is_admin %}
@@ -17,7 +17,7 @@
                 {% endif %}
                 <li class="nav-item">
               <a class="flex-sm-fill text-sm-center nav-link" href="{{ url_for('add_article_view') }}">
-                Добавить статью
+                Add post
               </a></li>
               <li class="nav-item">
                 <a class="nav-link" href="{{ url_for('auth.logout') }}">

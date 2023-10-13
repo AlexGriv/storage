@@ -3,8 +3,6 @@ from time import time
 import jwt
 from flask_login import UserMixin
 from flask import current_app
-from itsdangerous.url_safe import URLSafeTimedSerializer as Serializer
-
 from . import db
 
 

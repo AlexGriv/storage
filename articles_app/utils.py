@@ -1,13 +1,10 @@
 import secrets, os
 from PIL import Image
-from flask import current_app, render_template, url_for
+from flask import current_app, render_template
 from flask_login import current_user
 from flask_mail import Message
-from .forms import ResetForm, ResetPasswordForm
+from .forms import ResetForm
 from articles_app import mail
-from .models import User
-
-
 
 
 def picture_path(picture):
